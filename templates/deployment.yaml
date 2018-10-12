@@ -33,31 +33,25 @@ spec:
         {{- else }}
           value: "no"
         {{- end }}
-        - name: MARIADB_HOST
+        - name: MYSQL_WP_HOST
         {{- if .Values.mariadb.enabled }}
           value: {{ template "mariadb.fullname" . }}
         {{- else }}
           value: {{ .Values.externalDatabase.host | quote }}
         {{- end }}
-        - name: MARIADB_PORT_NUMBER
-        {{- if .Values.mariadb.enabled }}
-          value: "3306"
-        {{- else }}
-          value: {{ .Values.externalDatabase.port | quote }}
-        {{- end }}
-        - name: WORDPRESS_DATABASE_NAME
+        - name: MYSQL_WP_DBNAME
         {{- if .Values.mariadb.enabled }}
           value: {{ .Values.mariadb.db.name | quote }}
         {{- else }}
           value: {{ .Values.externalDatabase.database | quote }}
         {{- end }}
-        - name: WORDPRESS_DATABASE_USER
+        - name: MYSQL_WP_USER
         {{- if .Values.mariadb.enabled }}
           value: {{ .Values.mariadb.db.user | quote }}
         {{- else }}
           value: {{ .Values.externalDatabase.user | quote }}
         {{- end }}
-        - name: WORDPRESS_DATABASE_PASSWORD
+        - name: MYSQL_WP_PASSWORD
           valueFrom:
             secretKeyRef:
             {{- if .Values.mariadb.enabled }}
@@ -67,38 +61,78 @@ spec:
               name: {{ printf "%s-%s" .Release.Name "externaldb" }}
               key: db-password
             {{- end }}
-        - name: WORDPRESS_USERNAME
-          value: {{ .Values.wordpressUsername | quote }}
-        - name: WORDPRESS_PASSWORD
+        
+        - name: WP_TITLE
+          value: {{ .Values.applicationTitle | quote }}
+        - name: WP_ADMIN_USER
+          value: {{ .Values.applicationAdminUsername | quote }}
+        - name: WP_ADMIN_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
-              key: wordpress-password
-        - name: WORDPRESS_EMAIL
-          value: {{ .Values.wordpressEmail | quote }}
-        - name: WORDPRESS_FIRST_NAME
-          value: {{ .Values.wordpressFirstName | quote }}
-        - name: WORDPRESS_LAST_NAME
-          value: {{ .Values.wordpressLastName | quote }}
-        - name: WORDPRESS_BLOG_NAME
-          value: {{ .Values.wordpressBlogName | quote }}
-        - name: WORDPRESS_TABLE_PREFIX
-          value: {{ .Values.wordpressTablePrefix | quote }}
-        - name: SMTP_HOST
-          value: {{ .Values.smtpHost | quote }}
-        - name: SMTP_PORT
-          value: {{ .Values.smtpPort | quote }}
-        - name: SMTP_USER
-          value: {{ .Values.smtpUser | quote }}
-        - name: SMTP_PASSWORD
+              key: application-admin-password
+        - name: WP_ADMIN_EMAIL
+          value: {{ .Values.applicationAdminEmail | quote }}
+        - name: WP_HTTPS
+          value: {{ .Values.applicationHTTPS | quote }}
+        - name: WP_URL
+          value: {{ .Values.applicationStagingURL | quote }}
+        - name: WP_ALIAS
+          value: {{ .Values.applicationAlias | quote }}
+        - name: WP_LIVE
+          value: {{ .Values.applicationLive | quote }}
+        - name: WP_CDN
+          value: {{ .Values.applicationCDN | quote }}
+        - name: S3WAAS_APP_TAG
+          value: {{ .Values.applicationTag | quote }}
+
+        - name: WP_FIND_URL
+          value: {{ .Values.applicationMasterURL | quote }}
+        - name: WP_LANG_NAME
+          value: {{ .Values.applicationLanguageName | quote }}
+        - name: WP_LANG_CODE
+          value: {{ .Values.applicationLanguageCode | quote }}
+        - name: WP_LANG_LOCALE
+          value: {{ .Values.applicationLanguageLocale | quote }}
+        - name: WP_THEME_NAME
+          value: {{ .Values.applicationThemeName | quote }}
+
+        - name: S3_UPLOADS_BUCKET
+          value: {{ .Values.applicationS3UploadsBucket | quote }}
+        - name: S3_UPLOADS_KEY
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
-              key: smtp-password
-        - name: SMTP_USERNAME
-          value: {{ .Values.smtpUsername | quote }}
-        - name: SMTP_PROTOCOL
-          value: {{ .Values.smtpProtocol | quote }}
+              key: object-storage-key
+        - name: S3_UPLOADS_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: object-storage-secret
+        - name: S3_UPLOADS_REGION
+          value: {{ .Values.applicationS3UploadsRegion | quote }}
+        - name: S3_UPLOADS_ENDPOINT
+          value: {{ .Values.applicationS3UploadsEndpoint | quote }}
+        - name: S3_UPLOADS_BUCKET_URL
+          value: {{ .Values.applicationS3UploadsBucketURL | quote }}
+        - name: S3_UPLOADS_CDN_URL
+          value: {{ .Values.applicationS3UploadsCDNURL | quote }}
+
+        # - name: SMTP_HOST
+        #   value: {{ .Values.smtpHost | quote }}
+        # - name: SMTP_PORT
+        #   value: {{ .Values.smtpPort | quote }}
+        # - name: SMTP_USER
+        #   value: {{ .Values.smtpUser | quote }}
+        # - name: SMTP_PASSWORD
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: {{ template "fullname" . }}
+        #       key: smtp-password
+        # - name: SMTP_USERNAME
+        #   value: {{ .Values.smtpUsername | quote }}
+        # - name: SMTP_PROTOCOL
+        #   value: {{ .Values.smtpProtocol | quote }}
         ports:
         - name: http
           containerPort: 80
@@ -106,7 +140,7 @@ spec:
           containerPort: 443
         livenessProbe:
           httpGet:
-            path: /wp-login.php
+            path: /version.php
           {{- if not .Values.healthcheckHttps }}
             port: http
           {{- else }}
@@ -116,7 +150,7 @@ spec:
 {{ toYaml .Values.livenessProbe | indent 10 }}
         readinessProbe:
           httpGet:
-            path: /wp-login.php
+            path: /version.php
           {{- if not .Values.healthcheckHttps }}
             port: http
           {{- else }}
@@ -124,16 +158,16 @@ spec:
             scheme: HTTPS
           {{- end }}
 {{ toYaml .Values.readinessProbe | indent 10 }}
-        volumeMounts:
-        - mountPath: /bitnami/apache
-          name: wordpress-data
-          subPath: apache
-        - mountPath: /bitnami/wordpress
-          name: wordpress-data
-          subPath: wordpress
-        - mountPath: /bitnami/php
-          name: wordpress-data
-          subPath: php
+        # volumeMounts:
+        # - mountPath: /bitnami/apache
+        #   name: wordpress-data
+        #   subPath: apache
+        # - mountPath: /bitnami/wordpress
+        #   name: wordpress-data
+        #   subPath: wordpress
+        # - mountPath: /bitnami/php
+        #   name: wordpress-data
+        #   subPath: php
         resources:
 {{ toYaml .Values.resources | indent 10 }}
       volumes:

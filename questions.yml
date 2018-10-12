@@ -1,5 +1,4 @@
 categories:
-- Blog
 - CMS
 questions:
 - variable: defaultImage
@@ -11,15 +10,15 @@ questions:
   group: "Container Images"
   subquestions:
   - variable: image.repository
-    default: "bitnami/wordpress"
-    description: "WordPress image name"
+    default: "ranjan653/application"
+    description: "S3WaaS District Application image name"
     type: string
-    label: WordPress Image Name
+    label: S3WaaS District Application image name
   - variable: image.tag
-    default: "4.9.8-debian-9"
-    description: "WordPress image tag"
+    default: "3.16.2"
+    description: "S3WaaS District Application image tag"
     type: string
-    label: Image Tag
+    label: S3WaaS District Application image tag
   - variable: mariadb.image.repository
     default: "bitnami/mariadb"
     description: "MariaDB image name"
@@ -30,26 +29,144 @@ questions:
     description: "MariaDB image tag"
     type: string
     label: MariaDB Image Tag
-- variable: wordpressUsername
-  default: "user"
-  description: "User of the application"
+
+- variable: applicationTitle
+  default: "District Website"
+  description: "District Website Name"
   type: string
   required: true
-  label: WordPress Usernname
-  group: "WordPress Settings"
-- variable: wordpressPassword
+  label: District Website Name
+  group: "District Application Settings"
+- variable: applicationAdminUsername
+  default: "admin"
+  description: "District Application Admin Username"
+  type: string
+  required: true
+  label: Admin Username
+  group: "District Application Settings"
+- variable: applicationAdminPassword
   default: ""
   description: "password will be auto-generated if not specified"
   type: password
-  label: WordPress Password
-  group: "WordPress Settings"
-- variable: wordpressEmail
+  label: Admin Password
+  group: "District Application Settings"
+- variable: applicationAdminEmail
   default: "user@example.com"
   description: "Admin email"
+  label: Admin email
   type: string
   required: true
-  label: WordPress Admin Email
-  group: "WordPress Settings"
+  description: "District Application Admin Email"
+  group: "District Application Settings"
+- variable: applicationMasterURL
+  default: "master.ndcspcl1.awaas.gov.in"
+  label: Golden Image URL
+  type: string
+  required: true
+  description: "Master(Golden) Image URL of S3WaaS District Application"
+  group: "District Application Settings"
+- variable: applicationLanguageName
+  default: "Hindi"
+  label: Language Name
+  type: string
+  required: true
+  description: "District Application language human readable name"
+  group: "District Application Settings"
+- variable: applicationLanguageCode
+  default: "hi"
+  label: Language Code
+  type: string
+  required: true
+  description: "District Application language code to be used in URL"
+  group: "District Application Settings"
+- variable: applicationLanguageLocale
+  default: "hi_IN"
+  label: Language Locale
+  type: string
+  required: true
+  description: "District Application language locale as per I18n standards"
+  group: "District Application Settings"
+- variable: applicationThemeName
+  default: "district-theme-2"
+  label: Theme Code
+  type: string
+  required: true
+  description: "District Application theme code, If you wan to choose theme 1 use district-theme-1"
+  group: "District Application Settings"
+- variable: applicationStagingURL
+  label: Staging URL
+  type: string
+  required: true
+  description: "District Application random generated url with s3waas.gov.in TLD"
+  group: "District Application Settings"
+- variable: applicationAlias
+  default: "https://district.nic.in"
+  label: District Website URL
+  type: string
+  required: true
+  description: "District Application URL on which it would be publicly available"
+  group: "District Application Settings"
+- variable: applicationLive
+  default: "false"
+  label: Make Live
+  type: boolean
+  description: "Application settings for sites that are being made Live with district URL"
+  group: "District Application Settings"
+- variable: applicationHTTPS
+  default: "false"
+  label: Application running on HTTPS
+  type: boolean
+  description: "Application HTTPS settings"
+  group: "District Application Settings"
+- variable: persistence.enabled
+  default: false
+  description: "Enable persistent volume for S3WaaS District Application"
+  type: boolean
+  required: true
+  label: WordPress Persistent Volume Enabled
+  show_subquestion_if: true
+  group: "District Application Settings"
+  subquestions:
+  - variable: persistence.size
+    default: "10Gi"
+    description: "WordPress Persistent Volume Size"
+    type: string
+    label: WordPress Volume Size
+  - variable: persistence.storageClass
+    default: ""
+    description: "If undefined or null, uses the default StorageClass. Default to null"
+    type: storageclass
+    label: Default StorageClass for S3WaaS District Application
+
+- variable: applicationS3UploadsBucket
+  default: "master"
+  label: S3 Bucket
+  type: string
+  required: true
+  description: "District Application Object Storage Bucket name"
+  group: "Object Storage"
+- variable: applicationS3UploadsRegion
+  default: "custom"
+  label: S3 Region
+  type: string
+  required: true
+  description: "District Application S3 Uploads bucket region"
+  group: "Object Storage"
+- variable: applicationS3UploadsEndpoint
+  default: "https://static.s3waas.gov.in"
+  label: S3 URL
+  type: string
+  required: true
+  description: "District Application S3 URL endpoint"
+  group: "Object Storage"
+- variable: applicationS3UploadsCDNURL
+  default: "https://cdn.s3waas.gov.in"
+  label: S3 CDN
+  type: string
+  required: true
+  description: "District Application S3 uploads CDN URL (Akamai)"
+  group: "Object Storage"
+
 - variable: mariadb.enabled
   default: true
   description: "Deploy a database server as part of this deployment, or set to false and configure an external database connection."
@@ -134,25 +251,6 @@ questions:
     description: "If not empty, uses the specified existing PVC instead of creating new one"
     type: string
     label: Existing Persistent Volume Claim for MariaDB
-- variable: persistence.enabled
-  default: false
-  description: "Enable persistent volume for WordPress"
-  type: boolean
-  required: true
-  label: WordPress Persistent Volume Enabled
-  show_subquestion_if: true
-  group: "WordPress Settings"
-  subquestions:
-  - variable: persistence.size
-    default: "10Gi"
-    description: "WordPress Persistent Volume Size"
-    type: string
-    label: WordPress Volume Size
-  - variable: persistence.storageClass
-    default: ""
-    description: "If undefined or null, uses the default StorageClass. Default to null"
-    type: storageclass
-    label: Default StorageClass for WordPress
 - variable: ingress.enabled
   default: true
   description: "Expose app using Layer 7 Load Balancer - ingress"
