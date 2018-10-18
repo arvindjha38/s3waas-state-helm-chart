@@ -158,10 +158,10 @@ spec:
             scheme: HTTPS
           {{- end }}
 {{ toYaml .Values.readinessProbe | indent 10 }}
-        volumeMounts:
-        - name: wordpress-data
-          mountPath: /var/www/html
-          readOnly: true
+        # volumeMounts:
+        # - name: wordpress-data
+        #   mountPath: /var/www/html
+        #   readOnly: true
         #   subPath: apache
         # - mountPath: /bitnami/wordpress
         #   name: wordpress-data
@@ -171,11 +171,11 @@ spec:
         #   subPath: php
         resources:
 {{ toYaml .Values.resources | indent 10 }}
-      volumes:
-      - name: wordpress-data
-        hostPath:
-          path: /var/www/html
-          type: ""
+      # volumes:
+      # - name: wordpress-data
+      #   hostPath:
+      #     path: /var/www/html
+      #     type: ""
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
           claimName: {{ .Values.persistence.existingClaim | default (include "fullname" .) }}
