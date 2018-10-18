@@ -169,9 +169,16 @@ spec:
         #   name: wordpress-data
         #   subPath: php
         resources:
+        volumeMounts:
+          - mountPath: {{ .Values.applicationMountPath }}
+            name: s3waas-state-app-code
+            readOnly: true
 {{ toYaml .Values.resources | indent 10 }}
       volumes:
-      - name: wordpress-data
+      - name: s3waas-state-app-code
+        hostPath: 
+          path: {{ .Values.applicationMountPath }}
+          type: ""
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
           claimName: {{ .Values.persistence.existingClaim | default (include "fullname" .) }}

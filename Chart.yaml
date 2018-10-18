@@ -1,7 +1,7 @@
 name: wordpress
 version: 1.0.0
 appVersion: 1.0.0
-description: Web publishing platform for building district websites.
+description: Web publishing platform for building state websites.
 icon: https://auth.s3waas.gov.in/sites/default/files/logo.png
 keywords:
 - wordpress

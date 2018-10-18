@@ -3,37 +3,39 @@
 ##
 image:
   registry: docker.io
-  repository: ranjan653/application
-  tag: 3.16.2
+  repository: ranjan653/s3waas-state-app
+  tag: 1.0.0
   pullPolicy: IfNotPresent
 
-applicationTag: 3.16.2
-applicationTitle: "District Website"
+applicationTag: 1.0.0
+applicationTitle: "State Website"
 applicationStagingURL: ""
 applicationAlias: ""
 
 applicationAdminUsername: admin
 applicationAdminEmail: noreply@s3waas.gov.in
-applicationAdminPassword: "pass321"
-applicationMasterURL: http://master.ndcspcl1.awaas.gov.in
+applicationAdminPassword: "pass@321"
+applicationMasterURL: http://preview.s3waas.gov.in
 
 applicationLanguageName: Hindi
 applicationLanguageCode: hi
 applicationLanguageLocale: hi_IN
-applicationThemeName: district-theme-2
+applicationThemeName: district-theme-1
 
 applicationDBUsername: root
 # applicationDBPassword: ""
 
 applicationS3UploadsBucket: master
 applicationS3UploadsRegion: custom
-applicationS3UploadsEndpoint: https://static.s3waas.gov.in
-applicationS3UploadsBucketURL: https://static.s3waas.gov.in/master
-applicationS3UploadsCDNURL: https://cdn.s3waas.gov.in
+applicationS3UploadsEndpoint: https://s3waasnic.gov.in
+applicationS3UploadsBucketURL: https://s3waasnic.gov.in/master
+applicationS3UploadsCDNURL: https://s3waasnic.gov.in
 
 applicationLive: 0
 applicationHTTPS: "off"
 applicationCDN: 1
+
+applicationMountPath: /var/www/html
 
 
 allowEmptyPassword: "no"
@@ -81,7 +83,7 @@ mariadb:
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
   ##
   db:
-    name: s3waas_wp_db
+    name: s3waas_state_app_db
     user: s3waas
     ## If the password is not specified, mariadb will generates a random password
     ##
@@ -106,7 +108,7 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      # storageClass: "-"
+      storageClass: "s3waas"
       accessMode: ReadWriteOnce
       size: 8Gi
 

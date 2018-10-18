@@ -10,15 +10,15 @@ questions:
   group: "Container Images"
   subquestions:
   - variable: image.repository
-    default: "ranjan653/application"
-    description: "S3WaaS District Application image name"
+    default: "ranjan653/s3waas-state-app"
+    description: "S3WaaS State Application image name"
     type: string
-    label: S3WaaS District Application image name
+    label: S3WaaS State Application image name
   - variable: image.tag
-    default: "3.16.2"
-    description: "S3WaaS District Application image tag"
+    default: "1.0.0"
+    description: "S3WaaS State Application image tag"
     type: string
-    label: S3WaaS District Application image tag
+    label: S3WaaS State Application image tag
   - variable: mariadb.image.repository
     default: "bitnami/mariadb"
     description: "MariaDB image name"
@@ -31,101 +31,100 @@ questions:
     label: MariaDB Image Tag
 
 - variable: applicationTitle
-  default: "District Website"
-  description: "District Website Name"
+  default: "State Website"
+  description: "State Website Name"
   type: string
   required: true
-  label: District Website Name
-  group: "District Application Settings"
+  label: State Website Name
+  group: "State Application Settings"
 - variable: applicationAdminUsername
   default: "admin"
-  description: "District Application Admin Username"
+  description: "State Application Admin Username"
   type: string
   required: true
   label: Admin Username
-  group: "District Application Settings"
+  group: "State Application Settings"
 - variable: applicationAdminPassword
   default: ""
   description: "password will be auto-generated if not specified"
   type: password
   label: Admin Password
-  group: "District Application Settings"
+  group: "State Application Settings"
 - variable: applicationAdminEmail
-  default: "user@example.com"
+  default: "noreply@s3waas.gov.in"
   description: "Admin email"
   label: Admin email
   type: string
   required: true
-  description: "District Application Admin Email"
-  group: "District Application Settings"
+  group: "State Application Settings"
 - variable: applicationMasterURL
-  default: "master.ndcspcl1.awaas.gov.in"
+  default: "preview.s3waas.gov.in"
   label: Golden Image URL
   type: string
   required: true
-  description: "Master(Golden) Image URL of S3WaaS District Application"
-  group: "District Application Settings"
+  description: "Preview(Golden) Image URL of S3WaaS State Application"
+  group: "State Application Settings"
 - variable: applicationLanguageName
   default: "Hindi"
   label: Language Name
   type: string
   required: true
-  description: "District Application language human readable name"
-  group: "District Application Settings"
+  description: "State Application language human readable name"
+  group: "State Application Settings"
 - variable: applicationLanguageCode
   default: "hi"
   label: Language Code
   type: string
   required: true
-  description: "District Application language code to be used in URL"
-  group: "District Application Settings"
+  description: "State Application language code to be used in URL"
+  group: "State Application Settings"
 - variable: applicationLanguageLocale
   default: "hi_IN"
   label: Language Locale
   type: string
   required: true
-  description: "District Application language locale as per I18n standards"
-  group: "District Application Settings"
+  description: "State Application language locale as per I18n standards"
+  group: "State Application Settings"
 - variable: applicationThemeName
-  default: "district-theme-2"
+  default: "State-theme-2"
   label: Theme Code
   type: string
   required: true
-  description: "District Application theme code, If you wan to choose theme 1 use district-theme-1"
-  group: "District Application Settings"
+  description: "State Application theme code, If you wan to choose theme 1 use State-theme-1"
+  group: "State Application Settings"
 - variable: applicationStagingURL
   label: Staging URL
   type: string
   required: true
-  description: "District Application random generated url with s3waas.gov.in TLD"
-  group: "District Application Settings"
+  description: "State Application random generated url with s3waas.gov.in TLD"
+  group: "State Application Settings"
 - variable: applicationAlias
-  default: "https://district.nic.in"
-  label: District Website URL
+  default: "https://state.nic.in"
+  label: State Website URL
   type: string
   required: true
-  description: "District Application URL on which it would be publicly available"
-  group: "District Application Settings"
+  description: "State Application URL on which it would be publicly available"
+  group: "State Application Settings"
 - variable: applicationLive
   default: "false"
   label: Make Live
   type: boolean
-  description: "Application settings for sites that are being made Live with district URL"
-  group: "District Application Settings"
+  description: "Application settings for sites that are being made Live with State URL"
+  group: "State Application Settings"
 - variable: applicationHTTPS
   default: "false"
   label: Application running on HTTPS
   type: boolean
   description: "Application HTTPS settings"
-  group: "District Application Settings"
+  group: "State Application Settings"
 - variable: persistence.enabled
   default: false
-  description: "Enable persistent volume for S3WaaS District Application"
+  description: "Enable persistent volume for S3WaaS State Application"
   type: boolean
   required: true
   label: WordPress Persistent Volume Enabled
   show_subquestion_if: true
-  group: "District Application Settings"
+  group: "State Application Settings"
   subquestions:
   - variable: persistence.size
     default: "10Gi"
@@ -136,35 +135,35 @@ questions:
     default: ""
     description: "If undefined or null, uses the default StorageClass. Default to null"
     type: storageclass
-    label: Default StorageClass for S3WaaS District Application
+    label: Default StorageClass for S3WaaS State Application
 
 - variable: applicationS3UploadsBucket
   default: "master"
   label: S3 Bucket
   type: string
   required: true
-  description: "District Application Object Storage Bucket name"
+  description: "State Application Object Storage Bucket name"
   group: "Object Storage"
 - variable: applicationS3UploadsRegion
   default: "custom"
   label: S3 Region
   type: string
   required: true
-  description: "District Application S3 Uploads bucket region"
+  description: "State Application S3 Uploads bucket region"
   group: "Object Storage"
 - variable: applicationS3UploadsEndpoint
-  default: "https://static.s3waas.gov.in"
+  default: "https://s3waasnic.gov.in"
   label: S3 URL
   type: string
   required: true
-  description: "District Application S3 URL endpoint"
+  description: "State Application S3 URL endpoint"
   group: "Object Storage"
 - variable: applicationS3UploadsCDNURL
-  default: "https://cdn.s3waas.gov.in"
+  default: "https://s3waasnic.gov.in"
   label: S3 CDN
   type: string
   required: true
-  description: "District Application S3 uploads CDN URL (Akamai)"
+  description: "State Application S3 uploads CDN URL (Akamai)"
   group: "Object Storage"
 
 - variable: mariadb.enabled
@@ -177,12 +176,12 @@ questions:
   group: "Database Settings"
   subquestions:
   - variable: mariadb.db.name
-    default: "wordpress"
+    default: "s3waas_state_app_db"
     description: "Database name to create"
     type: string
     label: MariaDB Database
   - variable: mariadb.db.user
-    default: "wordpress"
+    default: "s3waas"
     description: "Database user to create"
     type: string
     label: MariaDB User
