@@ -171,11 +171,11 @@ spec:
         #   subPath: php
         resources:
 {{ toYaml .Values.resources | indent 10 }}
-      volumes:
-      - hostPath:
-          path: /var/www/html
-          type: ""
-        name: s3waas-state-app-code
+      # volumes:
+      # - hostPath:
+      #     path: /var/www/html
+      #     type: ""
+      #   name: s3waas-state-app-code
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
           claimName: {{ .Values.persistence.existingClaim | default (include "fullname" .) }}
