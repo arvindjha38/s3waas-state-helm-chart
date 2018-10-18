@@ -36,6 +36,7 @@ applicationHTTPS: "off"
 applicationCDN: 1
 
 applicationMountPath: /var/www/html
+wordpressTablePrefix: aw_
 
 
 allowEmptyPassword: "no"

@@ -61,7 +61,9 @@ spec:
               name: {{ printf "%s-%s" .Release.Name "externaldb" }}
               key: db-password
             {{- end }}
-        
+
+        - name: WORDPRESS_TABLE_PREFIX
+          value: {{ .Values.wordpressTablePrefix | quote }}
         - name: WP_TITLE
           value: {{ .Values.applicationTitle | quote }}
         - name: WP_ADMIN_USER
