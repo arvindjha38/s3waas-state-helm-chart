@@ -151,6 +151,20 @@ questions:
   required: true
   description: "State Application S3 Uploads bucket region"
   group: "Object Storage"
+- variable: applicationS3UploadsKey
+  default: ""
+  label: S3 Uploads Key
+  type: string
+  required: true
+  description: "State Application S3 Uploads Key"
+  group: "Object Storage"
+- variable: applicationS3UploadsSecret
+  default: ""
+  label: S3 Uploads Secret
+  type: string
+  required: true
+  description: "State Application S3 Uploads Secret"
+  group: "Object Storage"
 - variable: applicationS3UploadsEndpoint
   default: "https://s3waasnic.gov.in"
   label: S3 URL
