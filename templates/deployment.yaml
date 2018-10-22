@@ -104,13 +104,13 @@ spec:
         - name: S3_UPLOADS_KEY
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
-              key: object-storage-key
+              name: s3waas-dept-secrets
+              key: ObjectStorageAccessKey
         - name: S3_UPLOADS_SECRET
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
-              key: object-storage-secret
+              name: s3waas-dept-secrets
+              key: ObjectStorageAccessSecret
         - name: S3_UPLOADS_REGION
           value: {{ .Values.applicationS3UploadsRegion | quote }}
         - name: S3_UPLOADS_ENDPOINT
